@@ -34,11 +34,9 @@ export const store = new Vuex.Store({
   },
   actions: {
     addItem({commit}, todoItem) {
-      // todoItem.key = '_' + Math.random().toString(36).substr(2, 9);
       axios.post('https://vuex-todo-b6d91.firebaseio.com/data.json', todoItem)
         .then(response => {
           commit('addItem', todoItem);
-          // console.log(response);
           this.state.error = 'false'
         })
         .catch(error => {
@@ -48,7 +46,6 @@ export const store = new Vuex.Store({
     removeItem({commit}, id) {
       commit('removeItem', id);
       console.log('delete id = ', id);
-      // console.log('delete key = ', key);
       axios.delete('https://vuex-todo-b6d91.firebaseio.com/data/' + id + '.json')
         .then(response => {
           console.log('Deleted successfully', response);
@@ -60,10 +57,7 @@ export const store = new Vuex.Store({
     fetchData({commit}) {
       axios.get('https://vuex-todo-b6d91.firebaseio.com/data.json')
         .then(response => {
-          // console.log('response data = ', response.data);
           let tempArr = [];
-
-          // console.log(response.data[key]);
 
           for (let key in response.data) {
             tempArr.push({

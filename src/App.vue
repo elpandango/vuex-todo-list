@@ -3,30 +3,40 @@
     <div class="container">
       <div class="row">
 
-        <img v-show="loaded" src="https://cdn-images-1.medium.com/max/800/0*cWpsf9D3g346Va20.gif" alt="">
+        <div class="col-xs-12">
+          <img v-show="loaded" src="https://cdn-images-1.medium.com/max/800/0*cWpsf9D3g346Va20.gif" alt="">
 
-        <div class="list-container" v-show="!loaded" v-if="!isEmpty">
-          <h1 class="text-left">Todo List:</h1>
-          <app-todo-item v-for="(item, index) in todoList"
-                         :title="item.title"
-                         :text="item.text"
-                         :id="item.id"
-                         :key="index"></app-todo-item>
-        </div>
-        <div v-show="!loaded" v-else>
-          <h1 class="text-left">Your todo list is empty.</h1>
+          <div class="list-container" v-show="!loaded" v-if="!isEmpty">
+            <h1 class="text-left">Todo List:</h1>
+            <transition-group name="slide-right" tag="div">
+              <app-todo-item v-for="(item, index) in todoList"
+                             :title="item.title"
+                             :text="item.text"
+                             :id="item.id"
+                             :key="index"></app-todo-item>
+            </transition-group>
+          </div>
+          <div v-show="!loaded" v-else>
+            <h1 class="text-left">Your todo list is empty.</h1>
+          </div>
         </div>
 
-        <hr>
-        <div class="text-left">
-          <button class="btn btn-primary" @click="fetchData">Fetch Data</button>
+        <div class="col-xs-12">
+          <hr>
+          <div class="text-left">
+            <button class="btn btn-primary" @click="fetchData">Fetch Data</button>
+          </div>
+          <hr>
         </div>
-        <hr>
-
-        <app-add-item></app-add-item>
-        <br>
-        <br>
       </div>
+
+
+      <div class="row">
+        <app-add-item></app-add-item>
+      </div>
+      <br>
+      <br>
+
     </div>
 
 
@@ -37,6 +47,27 @@
   img {
     height: 100px;
   }
+  .slide-right {
+    transition: all .5s;
+  }
+  .slide-right-enter, .slide-right-leave-to
+    /* .slide-right-leave-active for <2.1.8 */ {
+    opacity: 0;
+    transform: scale(0);
+  }
+  .slide-right-enter-to {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .slide-right-leave-active {
+    /*position: absolute;*/
+  }
+
+  .slide-right-move {
+    opacity: 1;
+    transition: all 0.5s;
+  }
 </style>
 
 <script>
@@ -44,7 +75,7 @@
   import AddItem from './components/AddItem.vue';
   import axios from 'axios';
   import imageUrl from './assets/preloader.gif';
-//  const imageUrl = require('https://cdn-images-1.medium.com/max/800/0*cWpsf9D3g346Va20.gif');
+  //  const imageUrl = require('https://cdn-images-1.medium.com/max/800/0*cWpsf9D3g346Va20.gif');
 
   export default {
     name: 'app',
