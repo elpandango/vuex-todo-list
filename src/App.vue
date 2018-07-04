@@ -2,15 +2,27 @@
   <div id="app">
     <div class="container">
       <div class="row">
+
         <img v-show="loaded" src="https://cdn-images-1.medium.com/max/800/0*cWpsf9D3g346Va20.gif" alt="">
-        <app-todo-item v-for="(item, index) in todoList"
-                       :title="item.title"
-                       :text="item.text"
-                       :id="item.id"
-                       :key="index"></app-todo-item>
+
+        <div class="list-container" v-show="!loaded" v-if="!isEmpty">
+          <h1 class="text-left">Todo List:</h1>
+          <app-todo-item v-for="(item, index) in todoList"
+                         :title="item.title"
+                         :text="item.text"
+                         :id="item.id"
+                         :key="index"></app-todo-item>
+        </div>
+        <div v-show="!loaded" v-else>
+          <h1 class="text-left">Your todo list is empty.</h1>
+        </div>
+
         <hr>
-        <button @click="fetchData">Fetch Data</button>
+        <div class="text-left">
+          <button class="btn btn-primary" @click="fetchData">Fetch Data</button>
+        </div>
         <hr>
+
         <app-add-item></app-add-item>
         <br>
         <br>
@@ -20,6 +32,12 @@
 
   </div>
 </template>
+
+<style scoped>
+  img {
+    height: 100px;
+  }
+</style>
 
 <script>
   import TodoItem from './components/TodoItem.vue';
@@ -40,6 +58,9 @@
       }
     },
     computed: {
+      isEmpty() {
+        return this.$store.getters.getTodoList.length === 0;
+      },
       loaded() {
         return this.$store.getters.getLoadingProgress;
       },
