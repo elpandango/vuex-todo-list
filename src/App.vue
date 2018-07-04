@@ -8,7 +8,7 @@
 
           <div class="list-container" v-show="!loaded" v-if="!isEmpty">
             <h1 class="text-left">Todo List:</h1>
-            <transition-group name="slide-right" tag="div">
+            <transition-group name="slide" mode="out-in">
               <app-todo-item v-for="(item, index) in todoList"
                              :title="item.title"
                              :text="item.text"
@@ -47,26 +47,47 @@
   img {
     height: 100px;
   }
-  .slide-right {
-    transition: all .5s;
-  }
-  .slide-right-enter, .slide-right-leave-to
-    /* .slide-right-leave-active for <2.1.8 */ {
+  .slide-enter {
+    /*transform: translateY(20px);*/
     opacity: 0;
-    transform: scale(0);
-  }
-  .slide-right-enter-to {
-    opacity: 1;
-    transform: scale(1);
   }
 
-  .slide-right-leave-active {
-    /*position: absolute;*/
+  .slide-enter-active {
+    animation: slide-in 1s ease-out forwards;
+    transition: opacity .5s;
   }
 
-  .slide-right-move {
-    opacity: 1;
-    transition: all 0.5s;
+  .slide-leave {
+
+  }
+
+  .slide-leave-active {
+    animation: slide-out 1s ease-out forwards;
+    transition: opacity 1s;
+    opacity: 0;
+    position: absolute;
+  }
+
+  .slide-move {
+    transition: transform 1s;
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translateY(20px);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slide-out {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(20px);
+    }
   }
 </style>
 
