@@ -2,7 +2,7 @@
   <div id="app">
     <div class="container">
       <div class="row">
-        <img v-show="loaded" src="./assets/preloader.gif" alt="">
+        <img v-show="loaded" src="https://cdn-images-1.medium.com/max/800/0*cWpsf9D3g346Va20.gif" alt="">
         <app-todo-item v-for="(item, index) in todoList"
                        :title="item.title"
                        :text="item.text"
@@ -25,6 +25,8 @@
   import TodoItem from './components/TodoItem.vue';
   import AddItem from './components/AddItem.vue';
   import axios from 'axios';
+  import imageUrl from './assets/preloader.gif';
+//  const imageUrl = require('https://cdn-images-1.medium.com/max/800/0*cWpsf9D3g346Va20.gif');
 
   export default {
     name: 'app',
