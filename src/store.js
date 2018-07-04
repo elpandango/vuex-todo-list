@@ -27,8 +27,8 @@ export const store = new Vuex.Store({
       state.todoList = null;
       state.todoList = todoList;
     },
-    removeItem(state, key) {
-      const deletedItem = state.todoList.findIndex(item => item.key === key);
+    removeItem(state, id) {
+      const deletedItem = state.todoList.findIndex(item => item.id === id);
       state.todoList.splice(deletedItem, 1);
     }
   },
