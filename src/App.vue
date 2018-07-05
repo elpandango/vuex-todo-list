@@ -3,37 +3,30 @@
     <div class="container">
       <div class="row">
 
-        <div class="col-xs-12">
+        <div class="col-sm-12 col-xs-12">
           <img v-show="loaded" src="https://cdn-images-1.medium.com/max/800/0*cWpsf9D3g346Va20.gif" alt="">
 
           <div class="list-container" v-show="!loaded" v-if="!isEmpty">
             <h1 class="text-left">Todo List:</h1>
-            <transition-group name="slide" mode="out-in">
-              <app-todo-item v-for="(item, index) in todoList"
-                             :title="item.title"
-                             :text="item.text"
-                             :id="item.id"
-                             :key="index"></app-todo-item>
-            </transition-group>
+            <div class="todos-wrap">
+              <transition-group name="slide">
+                <app-todo-item v-for="(item, index) in todoList"
+                               :title="item.title"
+                               :text="item.text"
+                               :id="item.id"
+                               :key="index"></app-todo-item>
+              </transition-group>
+            </div>
           </div>
           <div v-show="!loaded" v-else>
             <h1 class="text-left">Your todo list is empty.</h1>
           </div>
         </div>
-
-        <div class="col-xs-12">
-          <!--<hr>-->
-          <!--<div class="text-left">-->
-            <!--<button class="btn btn-primary" @click="fetchData">Fetch Data</button>-->
-          <!--</div>-->
-          <hr>
-        </div>
+        <hr>
       </div>
 
-
-      <div class="row">
-        <app-add-item></app-add-item>
-      </div>
+      <app-edit-item v-show="editWasClicked"></app-edit-item>
+      <app-add-item v-show="!editWasClicked"></app-add-item>
       <br>
       <br>
 
@@ -95,6 +88,7 @@
 <script>
   import TodoItem from './components/TodoItem.vue';
   import AddItem from './components/AddItem.vue';
+  import EditItems from './components/EditItems.vue';
   import axios from 'axios';
   import imageUrl from './assets/preloader.gif';
   //  const imageUrl = require('https://cdn-images-1.medium.com/max/800/0*cWpsf9D3g346Va20.gif');
@@ -103,7 +97,8 @@
     name: 'app',
     components: {
       appTodoItem: TodoItem,
-      appAddItem: AddItem
+      appAddItem: AddItem,
+      appEditItem: EditItems
     },
     methods: {
       fetchData() {
@@ -111,6 +106,9 @@
       }
     },
     computed: {
+      editWasClicked() {
+        return this.$store.getters.getEditWasClicked;
+      },
       isEmpty() {
         return this.$store.getters.getTodoList.length === 0;
       },
@@ -127,6 +125,11 @@
   }
 </script>
 <style>
+  /*.todos-wrap {*/
+    /*max-height: 280px;*/
+    /*overflow-y: scroll;*/
+    /*margin-bottom: 10px;*/
+  /*}*/
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

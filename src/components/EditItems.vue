@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-sm-12 col-xs-12">
       <form action="post">
-        <h2 class="text-left">Add new todo item</h2>
+        <h2 class="text-left">Edit todo item</h2>
         <div class="form-group text-left">
           <label>Todo title</label>
           <input type="text"
@@ -33,9 +33,10 @@
           Fields should be filled!
         </div>
         <div class="form-group text-left">
-          <button @click.prevent="onSubmit"
-                  class="btn btn-primary pull-left">Add New Item
+          <button @click.prevent="onEdit"
+                  class="btn btn-primary pull-left">Save Changes
           </button>
+          <button class="btn btn-danger" @click="onCancelEdit">Cancel</button>
         </div>
       </form>
     </div>
@@ -48,17 +49,12 @@
   export default {
     data() {
       return {
-        todoItem: {
-          title: '',
-          text: '',
-          id: ''
-        },
         emptyError: null
       }
     },
     computed: {
-      formSend() {
-        return this.$store.getters.getFormSend;
+      todoItem() {
+        return this.$store.getters.getTodoItem;
       },
       error() {
         return this.$store.getters.getError;
@@ -66,17 +62,23 @@
     },
     methods: {
       onSubmit(event) {
-        let self = this;
         if (this.todoItem.title !== '' && this.todoItem.text !== '') {
           this.$store.dispatch('addItem', this.todoItem);
           this.emptyError = '';
 
-//          this.todoItem.title = '';
-//          this.todoItem.text = '';
-//          this.todoItem.id = '';
+          this.todoItem.title = '';
+          this.todoItem.text = '';
+          this.todoItem.id = '';
         } else {
           this.emptyError = 'empty';
         }
+      },
+      onCancelEdit() {
+        this.$store.commit('cancelEditWasClicked');
+      },
+      onEdit() {
+        this.$store.dispatch('sendEditedItem', this.todoItem);
+        this.$store.commit('cancelEditWasClicked');
       }
     }
   }
