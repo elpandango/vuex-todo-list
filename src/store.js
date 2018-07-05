@@ -37,11 +37,30 @@ export const store = new Vuex.Store({
       axios.post('https://vuex-todo-b6d91.firebaseio.com/data.json', todoItem)
         .then(response => {
           commit('addItem', todoItem);
-          this.state.error = 'false'
+          this.state.error = 'false';
+
+          axios.get('https://vuex-todo-b6d91.firebaseio.com/data.json')
+            .then(response => {
+              let tempArr = [];
+
+              for (let key in response.data) {
+                tempArr.push({
+                  'title': response.data[key].title,
+                  'text': response.data[key].text,
+                  'key': response.data[key].id,
+                  'id': key
+                });
+
+              }
+              commit('fetchData', tempArr);
+              this.state.loading = false;
+            })
+
         })
         .catch(error => {
           this.state.error = 'true'
         });
+
     },
     removeItem({commit}, id) {
       commit('removeItem', id);

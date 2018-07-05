@@ -22,10 +22,10 @@
         </div>
 
         <div class="col-xs-12">
-          <hr>
-          <div class="text-left">
-            <button class="btn btn-primary" @click="fetchData">Fetch Data</button>
-          </div>
+          <!--<hr>-->
+          <!--<div class="text-left">-->
+            <!--<button class="btn btn-primary" @click="fetchData">Fetch Data</button>-->
+          <!--</div>-->
           <hr>
         </div>
       </div>
@@ -47,6 +47,7 @@
   img {
     height: 100px;
   }
+
   .slide-enter {
     /*transform: translateY(20px);*/
     opacity: 0;

@@ -66,6 +66,7 @@
 
         if (this.todoItem.title !== '' && this.todoItem.text !== '') {
           this.$store.dispatch('addItem', this.todoItem);
+//          this.$store.dispatch('fetchData');
           this.emptyError = '';
         } else {
           this.emptyError = 'empty';
