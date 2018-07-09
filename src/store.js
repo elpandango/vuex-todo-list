@@ -68,7 +68,7 @@ export const store = new Vuex.Store({
     removeItem({commit}, id) {
       commit('removeItem', id);
       console.log('delete id = ', id);
-      axios.delete('/' + id + '.json')
+      axios.delete('/data/' + id + '.json')
         .then(response => {
           console.log('Deleted successfully', response);
         })
