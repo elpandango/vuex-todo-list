@@ -36,7 +36,7 @@
           <button @click.prevent="onEdit"
                   class="btn btn-primary pull-left">Save Changes
           </button>
-          <button class="btn btn-danger" @click="onCancelEdit">Cancel</button>
+          <button class="btn btn-danger" @click.prevent="onCancelEdit">Cancel</button>
         </div>
       </form>
     </div>
