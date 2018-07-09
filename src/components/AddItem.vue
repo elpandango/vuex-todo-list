@@ -68,12 +68,20 @@
       onSubmit(event) {
         let self = this;
         if (this.todoItem.title !== '' && this.todoItem.text !== '') {
-          this.$store.dispatch('addItem', this.todoItem);
+
+          let formData = {
+            title: this.todoItem.title,
+            text: this.todoItem.text,
+            id: this.todoItem.id
+          };
+
+          this.$store.dispatch('addItem', formData);
           this.emptyError = '';
 
-//          this.todoItem.title = '';
-//          this.todoItem.text = '';
-//          this.todoItem.id = '';
+          this.todoItem.title = '';
+          this.todoItem.text = '';
+          this.todoItem.id = '';
+
         } else {
           this.emptyError = 'empty';
         }
