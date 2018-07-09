@@ -20,14 +20,24 @@ export const store = new Vuex.Store({
     editWasClicked: false
   },
   mutations: {
-    addItem(state, todoItem) {
-      // state.todoItem.title = todoItem.title;
-      // state.todoItem.text = todoItem.text;
-      // state.todoItem.id = todoItem.id;
-    },
-    fetchData(state, todoList) {
-      state.todoList = null;
-      state.todoList = todoList;
+    fetchData(state) {
+      axios.get('/data.json')
+        .then(response => {
+          let tempArr = [];
+          for (let key in response.data) {
+            tempArr.push({
+              'title': response.data[key].title,
+              'text': response.data[key].text,
+              'key': response.data[key].id,
+              'id': key
+            });
+          }
+          this.state.todoList = null;
+          this.state.todoList = tempArr;
+          this.state.loading = false;
+          this.state.formSend = true;
+        });
+
     },
     removeItem(state, id) {
       const deletedItem = state.todoList.findIndex(item => item.id === id);
@@ -47,28 +57,8 @@ export const store = new Vuex.Store({
     addItem({commit}, todoItem) {
       axios.post('/data.json', todoItem)
         .then(response => {
-          commit('addItem', todoItem);
           this.state.error = 'false';
-
-          axios.get('/data.json')
-            .then(response => {
-              let tempArr = [];
-
-              for (let key in response.data) {
-                tempArr.push({
-                  'title': response.data[key].title,
-                  'text': response.data[key].text,
-                  'key': response.data[key].id,
-                  'id': key
-                });
-
-              }
-              commit('fetchData', tempArr);
-              this.state.loading = false;
-
-              this.state.formSend = true;
-            })
-
+          commit('fetchData');
         })
         .catch(error => {
           this.state.error = 'true'
@@ -78,7 +68,7 @@ export const store = new Vuex.Store({
     removeItem({commit}, id) {
       commit('removeItem', id);
       console.log('delete id = ', id);
-      axios.delete('https://vuex-todo-b6d91.firebaseio.com/data/' + id + '.json')
+      axios.delete('/' + id + '.json')
         .then(response => {
           console.log('Deleted successfully', response);
         })
@@ -89,29 +79,10 @@ export const store = new Vuex.Store({
     sendEditedItem({commit}, todoItem) {
       const id = this.state.editItemId;
 
-      axios.put('https://vuex-todo-b6d91.firebaseio.com/data/' + id + '.json', todoItem)
+      axios.put('/data/' + id + '.json', todoItem)
         .then(response => {
           console.log('Edited successfully', response);
-
-          axios.get('/data.json')
-            .then(response => {
-              let tempArr = [];
-
-              console.log('Edit Fetch');
-
-              for (let key in response.data) {
-                tempArr.push({
-                  'title': response.data[key].title,
-                  'text': response.data[key].text,
-                  'key': response.data[key].id,
-                  'id': key
-                });
-
-              }
-              commit('fetchData', tempArr);
-              this.state.loading = false;
-            })
-
+          commit('fetchData');
         })
         .catch(error => {
           console.log('Error - ', error);
@@ -119,13 +90,9 @@ export const store = new Vuex.Store({
 
     },
     editItem({commit}, id, todoItem) {
-      // console.log('edited id = ', id);
-
       this.state.editItemId = id;
-
-      axios.get('https://vuex-todo-b6d91.firebaseio.com/data/' + id + '.json')
+      axios.get('/data/' + id + '.json')
         .then(response => {
-          // let tempArr = [];
 
           this.state.todoItem.title = response.data.title;
           this.state.todoItem.text = response.data.text;
@@ -134,22 +101,7 @@ export const store = new Vuex.Store({
         });
     },
     fetchData({commit}) {
-      axios.get('/data.json')
-        .then(response => {
-          let tempArr = [];
-
-          for (let key in response.data) {
-            tempArr.push({
-              'title': response.data[key].title,
-              'text': response.data[key].text,
-              'key': response.data[key].id,
-              'id': key
-            });
-
-          }
-          commit('fetchData', tempArr);
-          this.state.loading = false;
-        })
+      commit('fetchData');
     }
   },
   getters: {
